@@ -1,0 +1,3 @@
+test --test_output=errors
+     --verbose_failures
+     --build_tests_only

@@ -1,0 +1,27 @@
+load("@io_bazel_rules_docker//python:image.bzl", "py_image")
+load("@api_deps//:requirements.bzl", "all_requirements")
+load("@api_test_deps//:requirements.bzl", all_test_requirements = "all_requirements")
+
+py_library(
+    name = "default_library",
+    srcs = glob(["src/**/*.py"]),
+    deps = all_requirements + [
+       "//services/echo/proto:proto_library",
+    ]
+)
+
+py_test(
+    name = "default_test",
+    srcs = glob(["tests/**/*.py"]),
+    main = "tests/run.py",
+    deps = all_test_requirements + [
+        ":default_library",
+    ],
+)
+
+py_image(
+    name = "image",
+    srcs = ["src/api/main.py"],
+    main = "src/api/main.py",
+    deps = [":default_library"],
+)
